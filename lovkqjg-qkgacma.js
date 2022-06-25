@@ -397,16 +397,16 @@ Sairwalk.innerText = "Supplies:"
 Sautoclick.innerText = "Mines:"
 Supdate.innerText = "Fast Mines:"
 Slaser.innerText = "No Laser:"
-Sfps.innerText = "FPS Hack Ne Pa6oTaeT:"
+Sfps.innerText = "Nothing:"
 Sheal.innerText = "Auto Heal:"
 
 
-Sairwal.style.bottom = "77%"
-Sairwalk.style.bottom = "65%"
-Sautoclick.style.bottom = "53%"
+Sairwal.style.bottom = "75%"
+Sairwalk.style.bottom = "63%"
+Sautoclick.style.bottom = "51%"
 Supdate.style.bottom = "41%"
-Slaser.style.bottom = "29%"
-Sfps.style.bottom = "17%"
+Slaser.style.bottom = "27%"
+Sfps.style.bottom = "15%"
 Sheal.style.bottom = "5%"
 
 
