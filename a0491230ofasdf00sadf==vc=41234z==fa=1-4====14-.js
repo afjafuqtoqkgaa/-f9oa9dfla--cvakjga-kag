@@ -1357,7 +1357,7 @@ let cheatMenuCode = `
 
 		<div id="infoWindow">
 			<p>Press Insert To Toggle UI</p>
-            <a href="https://www.youtube.com/c/Kaijas?sub_confirmation=1" target="_blank"><center><font id="nig" color="#C2A10B">Made By Akz</center></font></p>
+            <a href="https://vk.com/id541273525" target="_blank"><center><font id="nig" color="#C2A10B">Made By Oversize</center></font></p>
 		</div>
 
 	</div>
