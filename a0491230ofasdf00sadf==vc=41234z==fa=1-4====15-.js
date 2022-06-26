@@ -589,13 +589,9 @@ let shellCache = null;
 let state = false;
 let salvoRocketsCount = 8;
 let targetId;
-let strikerHack = false
-let aimBot = false
 
 Striker.init = function (localPlayer)
 {
-    if(aimBot)
-    {
     if (!localPlayer)
     {
         return;
@@ -615,7 +611,6 @@ Striker.init = function (localPlayer)
         return;
     }
 
-
     let targetingSystem = striker.targetingSystem_0.targetingSystem_vutpoz$_0;
 
     if (!targetingSystem)
@@ -632,7 +627,7 @@ Striker.init = function (localPlayer)
 
     striker.__proto__.lockTarget_gcez93$ = function (t, e, n)
     {
-
+        striker.stopAiming();
         this.lockTarget_gcez93$$default(t, e);
         targetId = t.targetId;
         return true;
@@ -644,75 +639,12 @@ Striker.init = function (localPlayer)
         {
             shellCache = localPlayer.at(i).shellCache_0.itemsInUse_123ot1$_0.array_hd7ov6$_0;
             break;
-                }
-}
-                    }
-    }
-
-Striker.hack = function(localPlayer)
-{
-    if(!aimBot)
-    {
-
-    let world = GameObjects.getWorld();
-
-    if (!world)
-    {
-        return;
-    }
-
-    let striker = GameObjects.getStrikerComponent();
-
-    if (!striker)
-    {
-        return;
-    }
-
-
-    let targetingSystem = striker.targetingSystem_0.targetingSystem_vutpoz$_0;
-
-    if (!targetingSystem)
-    {
-        targetingSystem = striker.targetingSystem_0.targetingSystem_0;
-    }
-
-    let targetingSectorsCalculator = targetingSystem.directionCalculator_0.targetingSectorsCalculator_0;
-
-    targetingSectorsCalculator.maxElevationAngle_0 = 0.9;
-    targetingSectorsCalculator.minElevationAngle_0 = -0.5;
-
-    salvoRocketsCount = striker.salvoRocketsCount;
-
-    striker.__proto__.lockTarget_gcez93$ = function(t,e,n){return void 0===e&&(e=null),n?n(t,e):this.lockTarget_gcez93$$default(t,e)}
-
-
-    for (let i = 0; i < localPlayer.length; i++)
-    {
-        if (localPlayer.at(i).hasOwnProperty("shellCache_0"))
-        {
-            shellCache = localPlayer.at(i).shellCache_0.itemsInUse_123ot1$_0.array_hd7ov6$_0;
-            break;
-
-}
-    }
+        }
     }
 }
-
-
-document.addEventListener('keyup', (e) =>
-{
-    if (e.keyCode == 100 && Utils.isGameReady() && Utils.isNotOpenChat())
-    {
-        aimBot = !aimBot;
-    }
-})
-
-
 
 Striker.process = function (localPlayer)
 {
-    if(strikerHack)
-    {
     if (!localPlayer)
     {
         return;
@@ -741,7 +673,7 @@ Striker.process = function (localPlayer)
     {
         if (shellCache.length == salvoRocketsCount)
         {
-            setTimeout(() => { state = true; }, 500);
+            setTimeout(() => { state = true; }, 2000);
         }
 
         let targetPos = { x: 0, y: 0, z: 0 };
@@ -795,19 +727,13 @@ Striker.process = function (localPlayer)
         }
     }
 }
-}
-        if(!strikerHack)
-        {
-clearTimeout()
-        }
+// striket.h.js
 
-    document.addEventListener('keyup', (e) =>
+class Striker 
 {
-    if (e.keyCode == 101 && Utils.isGameReady() && Utils.isNotOpenChat())
-    {
-         strikerHack = !strikerHack;
-    }
-})
+    init = null; // args: 1 - localPlayer
+    process = null; // args: 1 - localPlayer
+}
 
 // removeMines.h.js
 
