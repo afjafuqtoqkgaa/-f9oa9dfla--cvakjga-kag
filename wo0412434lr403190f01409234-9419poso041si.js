@@ -118,7 +118,7 @@ Utils.isGameReady = function ()
 
 Utils.errorLog = function (text)
 {
-    console.log("[WAKHack] " + text);
+    console.log("[Assistant] " + text);
 }
 
 // gameObjects.h.js
@@ -326,89 +326,192 @@ GameObjects.getStrikerComponent = function ()
     return null;
 }
 
-class AirBreak {
-    process = null
+// airBreak.h.js
+
+class AirBreak
+{
+    process = null; // args: 1 - localPlayer
 }
-const airBreak = {
-    isShiftPressed: !1,
-    antiAim: !1,
-    state: !1,
+
+const airBreak =
+{
+    isShiftPressed: false,
+    antiAim: false,
+    state: false,
     speed: 50,
-    position: {
-        x: 0,
-        y: 0,
-        z: 0
-    },
-    velocity: {
-        x: 0,
-        y: 0,
-        z: 0
-    }
-};
-document.addEventListener("keyup", (e => {
-    16 == e.keyCode && 2 == e.location && Utils.isGameReady() && Utils.isNotOpenChat() && (airBreak.isShiftPressed = !0)
-})), document.addEventListener("keyup", (e => {
-    74 == e.keyCode && Utils.isGameReady() && Utils.isNotOpenChat() && (airBreak.antiAim = !airBreak.antiAim)
-})), AirBreak.process = function(e) {
-    if (!e) return;
-    let t = GameObjects.getWorld();
-    if (!t) return;
-    let a = GameObjects.getPhysicsComponent();
-    if (!a) return;
-    let n = GameObjects.getCamera();
-    if (!n) return;
-    let i = t.physicsScene_0.bodies_0.array_hd7ov6$_0;
-    if (!i) return;
-    if (airBreak.isShiftPressed)
-        if (airBreak.isShiftPressed = !1, airBreak.state = !airBreak.state, airBreak.state) airBreak.position.x = a.body.state.position.x, airBreak.position.y = a.body.state.position.y, airBreak.position.z = a.body.state.position.z, airBreak.velocity.x = 0, airBreak.velocity.y = 0, airBreak.velocity.z = 0;
-        else {
-            a.body.state.velocity.x = 0, a.body.state.velocity.y = 0, a.body.state.velocity.z = 0, a.body.state.angularVelocity.x = 0, a.body.state.angularVelocity.y = 0, a.body.state.angularVelocity.z = 0;
-            for (let e = 0; e < i.length; e++) i.at(e).movable = !0
-        } if (!airBreak.state) return;
-    let o = n.direction;
-    if (airBreak.velocity.x = 0, airBreak.velocity.y = 0, KeyPressing.isKeyPressed(87) && Utils.isNotOpenChat()) {
-        let e = {
-            x: airBreak.position.x + airBreak.speed * Math.sin(-o),
-            y: airBreak.position.y + airBreak.speed * Math.cos(-o),
-            z: 0
-        };
-        Utils.isNotKillZone(t, e) && (airBreak.position.x = e.x, airBreak.position.y = e.y, airBreak.velocity.x += a.body.maxSpeedXY * Math.sin(-o), airBreak.velocity.y += a.body.maxSpeedXY * Math.cos(-o))
-    }
-    if (KeyPressing.isKeyPressed(83) && Utils.isNotOpenChat()) {
-        let e = {
-            x: airBreak.position.x - airBreak.speed * Math.sin(-o),
-            y: airBreak.position.y - airBreak.speed * Math.cos(-o),
-            z: 0
-        };
-        Utils.isNotKillZone(t, e) && (airBreak.position.x = e.x, airBreak.position.y = e.y, airBreak.velocity.x -= a.body.maxSpeedXY * Math.sin(-o), airBreak.velocity.y -= a.body.maxSpeedXY * Math.cos(-o))
-    }
-    if (KeyPressing.isKeyPressed(65) && Utils.isNotOpenChat()) {
-        let e = {
-            x: airBreak.position.x - airBreak.speed * Math.sin(-(o - Math.PI / 2)),
-            y: airBreak.position.y - airBreak.speed * Math.cos(-(o - Math.PI / 2)),
-            z: 0
-        };
-        Utils.isNotKillZone(t, e) && (airBreak.position.x = e.x, airBreak.position.y = e.y, airBreak.velocity.x -= a.body.maxSpeedXY * Math.sin(-(o - Math.PI / 2)), airBreak.velocity.y -= a.body.maxSpeedXY * Math.cos(-(o - Math.PI / 2)))
-    }
-    if (KeyPressing.isKeyPressed(68) && Utils.isNotOpenChat()) {
-        let e = {
-            x: airBreak.position.x + airBreak.speed * Math.sin(-(o - Math.PI / 2)),
-            y: airBreak.position.y + airBreak.speed * Math.cos(-(o - Math.PI / 2)),
-            z: 0
-        };
-        Utils.isNotKillZone(t, e) && (airBreak.position.x = e.x, airBreak.position.y = e.y, airBreak.velocity.x += a.body.maxSpeedXY * Math.sin(-(o - Math.PI / 2)), airBreak.velocity.y += a.body.maxSpeedXY * Math.cos(-(o - Math.PI / 2)))
-    }
-    if (KeyPressing.isKeyPressed(81) && Utils.isNotOpenChat() && (airBreak.position.z += airBreak.speed), KeyPressing.isKeyPressed(69) && Utils.isNotOpenChat() && (airBreak.position.z -= airBreak.speed), KeyPressing.isKeyPressed(37) && Utils.isNotOpenChat() && airBreak.speed > 1 && (airBreak.speed -= 1), KeyPressing.isKeyPressed(39) && Utils.isNotOpenChat() && (airBreak.speed += 1), Utils.isParkourMode()) {
-        for (let e = 0; e < i.length; e++) i.at(e).movable = !1;
-        if (airBreak.antiAim) {
-            let e = t.entities_0.array_hd7ov6$_0.at(0).components_0.array.at(0).bounds;
-            a.interpolatedPosition.x = Utils.getRandomArbitrary(e.minX, e.maxX), a.interpolatedPosition.y = Utils.getRandomArbitrary(e.minY, e.maxY), a.interpolatedPosition.z = Utils.getRandomArbitrary(e.maxZ + 500, e.maxZ + 500)
-        }
-        a.body.state.position.x = airBreak.position.x, a.body.state.position.y = airBreak.position.y
-    } else a.body.state.velocity.x = airBreak.velocity.x, a.body.state.velocity.y = airBreak.velocity.y;
-    a.body.state.position.z = airBreak.position.z, a.body.state.velocity.z = airBreak.velocity.z, a.body.state.orientation.w = Math.sin(-(n.direction - Math.PI) / 2), a.body.state.orientation.z = Math.cos(-(n.direction - Math.PI) / 2), a.body.state.orientation.x = 0, a.body.state.orientation.y = 0, a.body.state.angularVelocity.x = 0, a.body.state.angularVelocity.y = 0, a.body.state.angularVelocity.z = 0
+    position: { x: 0, y: 0, z: 0 },
+    velocity: { x: 0, y: 0, z: 0 }
 }
- }
+
+// airBreak.c.js
+
+document.addEventListener('keyup', (e) =>
+{
+    if (e.keyCode == 16 && e.location == 2 && Utils.isGameReady() && Utils.isNotOpenChat())
+    {
+        airBreak.isShiftPressed = true;
+    }
+})
+
+document.addEventListener('keyup', (e) =>
+{
+    if (e.keyCode == 74 && Utils.isGameReady() && Utils.isNotOpenChat())
+    {
+        airBreak.antiAim = !airBreak.antiAim;
+    }
+})
+
+AirBreak.process = function (localPlayer)
+{
+    if (!localPlayer)
+    {
+        return;
+    }
+
+    let world = GameObjects.getWorld();
+
+    if (!world)
+    {
+        return;
+    }
+
+    let physicsComponent = GameObjects.getPhysicsComponent();
+
+    if (!physicsComponent)
+    {
+        return;
+    }
+
+    let camera = GameObjects.getCamera();
+
+    if (!camera)
+    {
+        return;
+    }
+
+    let bodies = world.physicsScene_0.bodies_0.array_hd7ov6$_0;
+
+    if (!bodies)
+    {
+        return;
+    }
+
+    if (airBreak.isShiftPressed)
+    {
+        airBreak.isShiftPressed = false;
+
+        airBreak.state = !airBreak.state;
+
+        if (airBreak.state)
+        {
+            airBreak.position.x = physicsComponent.body.state.position.x;
+            airBreak.position.y = physicsComponent.body.state.position.y;
+            airBreak.position.z = physicsComponent.body.state.position.z;
+
+            airBreak.velocity.x = 0;
+            airBreak.velocity.y = 0;
+            airBreak.velocity.z = 0;
+        }
+        else
+        {
+            physicsComponent.body.state.velocity.x = 0;
+            physicsComponent.body.state.velocity.y = 0;
+            physicsComponent.body.state.velocity.z = 0;
+
+            physicsComponent.body.state.angularVelocity.x = 0;
+            physicsComponent.body.state.angularVelocity.y = 0;
+            physicsComponent.body.state.angularVelocity.z = 0;
+
+            for (let i = 0; i < bodies.length; i++)
+            {
+                bodies.at(i).movable = true;
+            }
+        }
+    }
+
+    if (!airBreak.state)
+        return;
+
+    let direction = camera.direction;
+
+    airBreak.velocity.x = 0;
+    airBreak.velocity.y = 0;
+
+    if (KeyPressing.isKeyPressed(87 /*key: W*/) && Utils.isNotOpenChat())
+    {
+        let position =
+        {
+            x: airBreak.position.x + airBreak.speed * Math.sin(-direction),
+            y: airBreak.position.y + airBreak.speed * Math.cos(-direction),
+            z: 0
+        };
+
+        if (Utils.isNotKillZone(world, position))
+        {
+            airBreak.position.x = position.x;
+            airBreak.position.y = position.y;
+
+            airBreak.velocity.x += physicsComponent.body.maxSpeedXY * Math.sin(-direction);
+            airBreak.velocity.y += physicsComponent.body.maxSpeedXY * Math.cos(-direction);
+        }
+    }
+
+    if (KeyPressing.isKeyPressed(83 /*key: S*/) && Utils.isNotOpenChat())
+    {
+        let position =
+        {
+            x: airBreak.position.x - airBreak.speed * Math.sin(-direction),
+            y: airBreak.position.y - airBreak.speed * Math.cos(-direction),
+            z: 0
+        };
+
+        if (Utils.isNotKillZone(world, position))
+        {
+            airBreak.position.x = position.x;
+            airBreak.position.y = position.y;
+
+            airBreak.velocity.x -= physicsComponent.body.maxSpeedXY * Math.sin(-direction);
+            airBreak.velocity.y -= physicsComponent.body.maxSpeedXY * Math.cos(-direction);
+        }
+    }
+
+    if (KeyPressing.isKeyPressed(65 /*key: A*/) && Utils.isNotOpenChat())
+    {
+        let position =
+        {
+            x: airBreak.position.x - airBreak.speed * Math.sin(-(direction - Math.PI / 2)),
+            y: airBreak.position.y - airBreak.speed * Math.cos(-(direction - Math.PI / 2)),
+            z: 0
+        };
+
+        if (Utils.isNotKillZone(world, position))
+        {
+            airBreak.position.x = position.x;
+            airBreak.position.y = position.y;
+
+            airBreak.velocity.x -= physicsComponent.body.maxSpeedXY * Math.sin(-(direction - Math.PI / 2));
+            airBreak.velocity.y -= physicsComponent.body.maxSpeedXY * Math.cos(-(direction - Math.PI / 2));
+        }
+    }
+
+    if (KeyPressing.isKeyPressed(68 /*key: D*/) && Utils.isNotOpenChat())
+    {
+        let position =
+        {
+            x: airBreak.position.x + airBreak.speed * Math.sin(-(direction - Math.PI / 2)),
+            y: airBreak.position.y + airBreak.speed * Math.cos(-(direction - Math.PI / 2)),
+            z: 0
+        };
+
+        if (Utils.isNotKillZone(world, position))
+        {
+            airBreak.position.x = position.x;
+            airBreak.position.y = position.y;
+
+            airBreak.velocity.x += physicsComponent.body.maxSpeedXY * Math.sin(-(direction - Math.PI / 2));
+            airBreak.velocity.y += physicsComponent.body.maxSpeedXY * Math.cos(-(direction - Math.PI / 2));
+        }
+    }
 
     if (KeyPressing.isKeyPressed(81 /*key: Q*/) && Utils.isNotOpenChat())
     {
@@ -429,7 +532,48 @@ document.addEventListener("keyup", (e => {
     if (KeyPressing.isKeyPressed(39 /*key: RIGHT*/) && Utils.isNotOpenChat())
     {
         airBreak.speed += 2;
-    };
+    }
+if(airBreak.speed >= 200){
+airBreak.speed = 200
+}
+    if (Utils.isParkourMode())
+    {
+        for (let i = 0; i < bodies.length; i++)
+        {
+            bodies.at(i).movable = false;
+        }
+
+        if (airBreak.antiAim)
+        {
+            let bounds = world.entities_0.array_hd7ov6$_0.at(0).components_0.array.at(0).bounds;
+
+            physicsComponent.interpolatedPosition.x = Utils.getRandomArbitrary(bounds.minX, bounds.maxX);
+            physicsComponent.interpolatedPosition.y = Utils.getRandomArbitrary(bounds.minY, bounds.maxY);
+            physicsComponent.interpolatedPosition.z = Utils.getRandomArbitrary(bounds.maxZ + 500, bounds.maxZ + 500);
+        }
+
+        physicsComponent.body.state.position.x = airBreak.position.x;
+        physicsComponent.body.state.position.y = airBreak.position.y;
+    }
+    else
+    {
+        physicsComponent.body.state.velocity.x = airBreak.velocity.x;
+        physicsComponent.body.state.velocity.y = airBreak.velocity.y;
+    }
+
+    physicsComponent.body.state.position.z = airBreak.position.z;
+    physicsComponent.body.state.velocity.z = airBreak.velocity.z;
+
+    physicsComponent.body.state.orientation.w = Math.sin(-(camera.direction - Math.PI) / 2);
+    physicsComponent.body.state.orientation.z = Math.cos(-(camera.direction - Math.PI) / 2);
+    physicsComponent.body.state.orientation.x = 0;
+    physicsComponent.body.state.orientation.y = 0;
+
+    physicsComponent.body.state.angularVelocity.x = 0;
+    physicsComponent.body.state.angularVelocity.y = 0;
+    physicsComponent.body.state.angularVelocity.z = 0;
+}
+
 
 // striket.h.js
 
@@ -557,7 +701,7 @@ Striker.hack = function(localPlayer)
 
 document.addEventListener('keyup', (e) =>
 {
-    if (e.keyCode == 120 && Utils.isGameReady() && Utils.isNotOpenChat())
+    if (e.keyCode == 100 && Utils.isGameReady() && Utils.isNotOpenChat())
     {
         aimBot = !aimBot;
     }
@@ -659,7 +803,7 @@ clearTimeout()
 
     document.addEventListener('keyup', (e) =>
 {
-    if (e.keyCode == 117 && Utils.isGameReady() && Utils.isNotOpenChat())
+    if (e.keyCode == 101 && Utils.isGameReady() && Utils.isNotOpenChat())
     {
          strikerHack = !strikerHack;
     }
@@ -711,7 +855,7 @@ RemoveMines.process = function (localPlayer)
 
 document.addEventListener('keyup', (e) =>
 {
-    if (e.keyCode == 118 && Utils.isGameReady() && Utils.isNotOpenChat())
+    if (e.keyCode == 102 && Utils.isGameReady() && Utils.isNotOpenChat())
     {
         removeMines = !removeMines;
     }
@@ -794,18 +938,387 @@ WallHack.process = function (localPlayer)
     }
 }
 
+// clicker.h.js
+
+class Clicker
+{
+    process = null; // args: 1 - localPlayer
+}
+
+// clicker.c.js
+
+let autoMining = false
+
+document.addEventListener('keyup', (e) =>
+{
+    if (e.keyCode == 35 && Utils.isGameReady() && Utils.isNotOpenChat())
+    {
+        autoMining = !autoMining;
+    }
+})
+
+
+class commons{
+getRoot = null
+getReactRoot = null
+getChatState = null
+searchObject = null
+}
+
+
+class game{
+getTankPhysics = null
+getTank = null
+getWorld = null
+getLaser = null
+getMines = null
+getFlags = null
+getPlayers = null
+getMapBoundary = null
+getBattleState = null
+getSupplies = null
+getHealth = null
+getStriker = null
+getCamera = null
+}
+
+game.getSupplies = function(supply){
+try {
+for(key in game.getTank().components_0.array[27].supplyTypeConfigs_0.entries.$outer.map_97q5dv$_0.internalMap_uxhen5$_0.backingMap_0){
+if(game.getTank().components_0.array[27].supplyTypeConfigs_0.entries.$outer.map_97q5dv$_0.internalMap_uxhen5$_0.backingMap_0[key].key_5xhq3d$_0.name$ == supply){
+return key
+}
+
+
+}
+} catch (error) {
+
+}
+
+
+}
+
+function getSupplyArrays(){
+try {
+window.mines = game.getSupplies("MINE")
+window.repairs = game.getSupplies("FIRST_AID")
+window.DA = game.getSupplies("DOUBLE_ARMOR")
+window.DD = game.getSupplies("DOUBLE_DAMAGE")
+window.NITRO = game.getSupplies("NITRO")
+
+} catch (error) {
+
+}
+}
+
+supps = setInterval(getSupplyArrays,500)
+
+
+Clicker.process = function (localPlayer)
+{
+    if (!localPlayer)
+    {
+        return;
+    }
+
+    let world = GameObjects.getWorld();
+
+    if (!world)
+    {
+        return;
+    }
+
+    let gameActions = GameObjects.getGameActions();
+
+    if (!gameActions)
+    {
+        return;
+    }
+
+    let healthComponent = GameObjects.getHealthComponent();
+
+    if (!healthComponent)
+    {
+        return;
+    }
+
+    if (Utils.isParkourMode() && !healthComponent.isFullHealth() && healthComponent.alive)
+    {
+game.getTank().components_0.array[27].supplyTypeConfigs_0.entries.$outer.map_97q5dv$_0.internalMap_uxhen5$_0.backingMap_0[mines]._value_0._value_0.onUserActivatedSupply()
+game.getTank().components_0.array[27].supplyTypeConfigs_0.entries.$outer.map_97q5dv$_0.internalMap_uxhen5$_0.backingMap_0[repairs]._value_0._value_0.onUserActivatedSupply()
+
+        world.frameStartTime_0 += 5000000;
+
+        world.inputManager.input.processActions_0();
+
+        world.frameStartTime_0 -= 5000000;
+    }
+
+    gameActions.at(6).at(1).wasPressed = true;
+    gameActions.at(6).at(1).wasReleased = true;
+
+    gameActions.at(7).at(1).wasPressed = true;
+    gameActions.at(7).at(1).wasReleased = true;
+
+    gameActions.at(8).at(1).wasPressed = true;
+    gameActions.at(8).at(1).wasReleased = true;
+
+    if (autoMining)
+    {
+game.getTank().components_0.array[27].supplyTypeConfigs_0.entries.$outer.map_97q5dv$_0.internalMap_uxhen5$_0.backingMap_0[mines]._value_0._value_0.onUserActivatedSupply()
+game.getTank().components_0.array[27].supplyTypeConfigs_0.entries.$outer.map_97q5dv$_0.internalMap_uxhen5$_0.backingMap_0[repairs]._value_0._value_0.onUserActivatedSupply()
+    }
+}
+
+
+
+
+class hacks{
+
+noLaser = null
+
+}
+
+
+
+
+
+
+commons.searchObject = function(object,item){
+try {
+for(let i=0; i<object.length;i++){
+if(object[i].hasOwnProperty(item))
+return object[i]
+
+}
+} catch (error) {
+
+}
+}
+commons.getRoot = function(){
+root = document.querySelector("#root")
+return root
+}
+
+commons.getReactRoot = function(){
+return root._reactRootContainer._internalRoot.current.memoizedState.element.type.prototype.store.subscribers.array_hd7ov6$_0
+
+}
+
+
+game.getTank = function(){
+return commons.searchObject(commons.getReactRoot(),"tank").tank
+
+}
+
+game.getLaser = function(){
+
+return commons.searchObject(game.getTank().components_0.array,"laserDirectionMessage_0")
+
+}
+
+
+
+hacks.noLaser = function(){
+try {
+game.getLaser().turnOffLaser_0()
+
+} catch (error) {
+
+}
+
+}
+
+let pressCount = 0
+document.addEventListener('keydown', (e) => { if (e.keyCode === 103){
+pressCount ++
+if(pressCount%2==1){
+window.p = setInterval(hacks.noLaser,20)
+
+
+}
+
+if(pressCount%2==0){
+
+clearInterval(window.p)
+
+}
+
+
+
+
+
+
+
+}})
+
+
+class RapidUpdate
+{
+process = null
+}
+
+let rapid = false
+
+RapidUpdate.process = function(localPlayer)
+{
+    if (!localPlayer)
+    {
+        return;
+    }
+
+    let world = GameObjects.getWorld();
+
+    if (!world)
+    {
+        return;
+    }
+    if(rapid)
+    {
+    try {
+   game.getTank().components_0.array[37].needImmediateUpdate_0 = true
+} catch (error) {
+
+ }}
+
+if(!rapid)
+{
+        try {
+   game.getTank().components_0.array[37].needImmediateUpdate_0 = false
+} catch (error) {
+
+ }
+}
+}
+document.addEventListener('keyup', (e) =>
+{
+    if (e.keyCode == 105 && Utils.isGameReady() && Utils.isNotOpenChat())
+    {
+        rapid = !rapid;
+    }
+})
+
+
+
+class NoImpact
+{
+process = null
+}
+
+let noImpact = false
+
+game.getPlayers = function(){
+return game.getTank().components_0.array[33].gameMode_0.tanksOnField
+
+}
+
+
+NoImpact.process = function(localPlayer)
+{
+    if (!localPlayer)
+    {
+        return;
+    }
+
+    let world = GameObjects.getWorld();
+
+    if (!world)
+    {
+        return;
+    }
+    let bodies = world.physicsScene_0.bodies_0.array_hd7ov6$_0;
+
+    if (!bodies)
+    {
+        return;
+    }
+
+    if(noImpact)
+    {
+for(let i=0;i<game.getPlayers().list_0.array.length;i++){
+for(let j=0;j<game.getPlayers().list_0.array[i].components_0.array.length;j++){
+game.getPlayers().list_0.array[i].components_0.array[j].impactForce_0 = 0
+game.getPlayers().list_0.array[i].components_0.array[j].recoilForce_0 = 0
+gameObjects.mines.mineSfx_6sg3n4$_0.cc.impactForce = 0
+
+}
+
+}
+
+
+
+}
+
+
+
+
+if(!noImpact)
+{
+return
+}
+}
+
+document.addEventListener('keyup', (e) =>
+{
+    if (e.keyCode == 120 && Utils.isGameReady() && Utils.isNotOpenChat())
+    {
+        noImpact = !noImpact;
+    }
+})
+
+
+class FastClicker
+{
+process = null
+}
+
+let fastClicker = false
+
+FastClicker.process = function(localPlayer)
+{
+    if (!localPlayer)
+    {
+        return;
+    }
+
+    let world = GameObjects.getWorld();
+
+    if (!world)
+    {
+        return;
+    }
+
+
+if (fastClicker)
+{
+gameObjects.localPlayer.at(37).sendState_0(gameObjects.physicsComponent.getInterpolatedBodyState());
+}
+
+    if(!fastClicker)
+    {
+return
+    }
+}
+
+    document.addEventListener('keyup', (e) =>
+{
+    if (e.keyCode == 103 && Utils.isGameReady() && Utils.isNotOpenChat())
+    {
+        fastClicker = !fastClicker;
+    }
+})
 
 let cheatMenuCode = `
 <div class="shizoval" id="shizoval_window">
 	<style>
         .shizoval {
             left: 1%;
-            top: 25%;
+            top: 15%;
             position: absolute;
             z-index: 1000;
             display: flex;
         }
-    .shizoval__content {
+        .shizoval__content {
             padding: 15px;
             background: "rgb(12 12 12 / 28%)";
             backdrop-filter: blur(15px);
@@ -819,23 +1332,27 @@ let cheatMenuCode = `
         }
 	</style>
 	<div class="shizoval__content">
-		<center>WAK Hack</center><hr style="height:2px;border-width:0;color:white;background-color:white">
-		<div id="gameStates" style="display: none;">	
-	    <p>Парение: <font id="airBreakStateColor" color="red"><label id="airBreakState">Выкл</label></font></p>
-	    <p>Скорость: <font color="#purple"><label id="airBreakSpeed">50</label></font></p>
-	    <p>Анти-Аим: <font id="antiAimStateColor" color="red"><label id="antiAimState">Выкл</label></font></p>
-            <p>Аим на страйк: <font id="aimBotStateColor" color="red"><label id="aimBotState">Выкл</label></font></p>
-            <p>Шот на страйк: <font id="strikerHackStateColor" color="red"><label id="strikerHackState">Выкл</label></font></p>
-            <p>Фпс хак: <font id="removeMinesStateColor" color="red"><label id="removeMinesState">Выкл</label></font></p>
+        <center><div class="sc-bwzfXH cMCjGt"  style="font-size: 15px">WAK Hack</center>
+		<div id="gameStates" style="display: none;">
+            <p>FlyHack: <font id="airBreakStateColor" color="red"><label id="airBreakState">OFF</label></font></p>
+	    <p>FlyHack Speed: <font color="#purple"><label id="airBreakSpeed">50</label></font></p>
+	    <p>Anti-Aim: <font id="antiAimStateColor" color="red"><label id="antiAimState">OFF</label></font></p>
+            <p>Striker Aimbot: <font id="aimBotStateColor" color="red"><label id="aimBotState">OFF</label></font></p>
+            <p>Striker One-Shot: <font id="strikerHackStateColor" color="red"><label id="strikerHackState">OFF</label></font></p>
+            <p>Remove Mines: <font id="removeMinesStateColor" color="red"><label id="removeMinesState">OFF</label></font></p>
+            <p>Clicker: <font id="autoMiningStateColor" color="red"><label id="autoMiningState">OFF</label></font></p>
+            <p>Fast Update: <font id="rapidStateColor" color="red"><label id="rapidState">OFF</label></font></p>
+            <p>No Impact: <font id="noImpactStateColor" color="red"><label id="noImpactState">OFF</label></font></p>
+	    <p>Rapid Update: <font id="rapidClickStateColor" color="red"><label id="rapidClickState">OFF</label></font></p>
 		</div>
 		<div id="infoWindow">
-            <p><center><font id="nig" color="black">Made by tdsrse</center></font></p>
+            <a href="https://vk.com/id541273525" target="_blank"><center><font id="nig" color="#E1E1E1">Made by Oversize</center></font></p>
 		</div>
 	</div>
 	<script>
 		document.addEventListener('keyup', function (evt)
 		{
-			if (evt.keyCode === 103)
+			if (evt.keyCode === 45)
 			{
 				if (document.getElementById("shizoval_window").style.display == "none")
 				{
@@ -902,6 +1419,9 @@ class CheatMenu
 let rmObj;
 let airBreakObj;
 let strikerObj;
+let clickerObj;
+let rapidObj;
+let impactObj;
 
 CheatMenu.init = function ()
 {
@@ -914,7 +1434,17 @@ CheatMenu.init = function ()
         {
             color: document.getElementById("antiAimStateColor"),
             label: document.getElementById("antiAimState")
-        }
+        },
+
+        airBreakState:
+        {
+            color: document.getElementById("airBreakStateColor"),
+            label: document.getElementById("airBreakState")
+        },
+        airBreakSpeed:
+        {
+            label: document.getElementById("airBreakSpeed")
+        },
     };
      strikerObj =
     {
@@ -930,6 +1460,7 @@ CheatMenu.init = function ()
             color: document.getElementById("aimBotStateColor"),
             label: document.getElementById("aimBotState")
         }
+
     };
 
      rmObj =
@@ -941,31 +1472,54 @@ CheatMenu.init = function ()
             label: document.getElementById("removeMinesState")
         }
     };
+     clickerObj =
+    {
+        autoMining:
+        {
+            color: document.getElementById("autoMiningStateColor"),
+            label: document.getElementById("autoMiningState")
+        }
+    };
+
+     rapidObj =
+    {
+
+        rapid:
+        {
+            color: document.getElementById("rapidStateColor"),
+            label: document.getElementById("rapidState")
+        },
+
+                 rapidClick:
+        {
+            color: document.getElementById("rapidClickStateColor"),
+            label: document.getElementById("rapidClickState")
+        }
+
+    };
+     impactObj =
+    {
+
+        noImpact:
+        {
+            color: document.getElementById("noImpactStateColor"),
+            label: document.getElementById("noImpactState")
+        }
+
+    };
 }
 
 CheatMenu.setStates = function ()
 {
-	if (clickerObj.autoMining.label.textContent == "Выкл" && autoMining == true)
+    if (airBreakObj.airBreakState.label.textContent == "OFF" && airBreak.state == true)
     {
-        clickerObj.autoMining.label.textContent = "Вкл";
-        clickerObj.autoMining.color.color = "#29CD24";
-    }
-
-    if (clickerObj.autoMining.label.textContent == "Вкл" && autoMining == false)
-    {
-        clickerObj.autoMining.label.textContent = "Выкл";
-        clickerObj.autoMining.color.color = "red";
-    }
-	
-if (airBreakObj.airBreakState.label.textContent == "Выкл" && airBreak.state == true)
-    {
-        airBreakObj.airBreakState.label.textContent = "Вкл";
+        airBreakObj.airBreakState.label.textContent = "ON";
         airBreakObj.airBreakState.color.color = "#29CD24";
     }
 
-    if (airBreakObj.airBreakState.label.textContent == "Вкл" && airBreak.state == false)
+    if (airBreakObj.airBreakState.label.textContent == "ON" && airBreak.state == false)
     {
-        airBreakObj.airBreakState.label.textContent = "Выкл";
+        airBreakObj.airBreakState.label.textContent = "OFF";
         airBreakObj.airBreakState.color.color = "red";
     }
 
@@ -973,53 +1527,99 @@ if (airBreakObj.airBreakState.label.textContent == "Выкл" && airBreak.state 
     {
         airBreakObj.airBreakSpeed.label.textContent = airBreak.speed;
     }
-	
-    if (airBreakObj.antiAimState.label.textContent == "Выкл" && airBreak.antiAim == true)
+
+    if (airBreakObj.antiAimState.label.textContent == "OFF" && airBreak.antiAim == true)
     {
-        airBreakObj.antiAimState.label.textContent = "Вкл";
+        airBreakObj.antiAimState.label.textContent = "ON";
         airBreakObj.antiAimState.color.color = "#29CD24";
     }
 
-    if (airBreakObj.antiAimState.label.textContent == "Вкл" && airBreak.antiAim == false)
+    if (airBreakObj.antiAimState.label.textContent == "ON" && airBreak.antiAim == false)
     {
-        airBreakObj.antiAimState.label.textContent = "Выкл";
+        airBreakObj.antiAimState.label.textContent = "OFF";
         airBreakObj.antiAimState.color.color = "red";
     }
-    if (strikerObj.strikerHackState.label.textContent == "Выкл" && strikerHack == true)
+
+    if (strikerObj.strikerHackState.label.textContent == "OFF" && strikerHack == true)
     {
-        strikerObj.strikerHackState.label.textContent = "Вкл";
+        strikerObj.strikerHackState.label.textContent = "ON";
         strikerObj.strikerHackState.color.color = "#29CD24";
     }
 
-    if (strikerObj.strikerHackState.label.textContent == "Вкл" && strikerHack == false)
+    if (strikerObj.strikerHackState.label.textContent == "ON" && strikerHack == false)
     {
-        strikerObj.strikerHackState.label.textContent = "Выкл";
+        strikerObj.strikerHackState.label.textContent = "OFF";
         strikerObj.strikerHackState.color.color = "red";
     }
 
-    if (strikerObj.aimBotState.label.textContent == "Выкл" && aimBot == true)
+    if (strikerObj.aimBotState.label.textContent == "OFF" && aimBot == true)
     {
-        strikerObj.aimBotState.label.textContent = "Вкл";
+        strikerObj.aimBotState.label.textContent = "ON";
         strikerObj.aimBotState.color.color = "#29CD24";
     }
 
-    if (strikerObj.aimBotState.label.textContent == "Вкл" && aimBot == false)
+    if (strikerObj.aimBotState.label.textContent == "ON" && aimBot == false)
     {
-        strikerObj.aimBotState.label.textContent = "Выкл";
+        strikerObj.aimBotState.label.textContent = "OFF";
         strikerObj.aimBotState.color.color = "red";
     }
 
-    if (rmObj.removeMinesState.label.textContent == "Выкл" && removeMines == true)
+    if (rmObj.removeMinesState.label.textContent == "OFF" && removeMines == true)
     {
-        rmObj.removeMinesState.label.textContent = "Вкл";
+        rmObj.removeMinesState.label.textContent = "ON";
         rmObj.removeMinesState.color.color = "#29CD24";
     }
 
-    if (rmObj.removeMinesState.label.textContent == "Вкл" && removeMines == false)
+    if (rmObj.removeMinesState.label.textContent == "ON" && removeMines == false)
     {
-        rmObj.removeMinesState.label.textContent = "Выкл";
+        rmObj.removeMinesState.label.textContent = "OFF";
         rmObj.removeMinesState.color.color = "red";
     }
+
+    if (clickerObj.autoMining.label.textContent == "OFF" && autoMining == true)
+    {
+        clickerObj.autoMining.label.textContent = "ON";
+        clickerObj.autoMining.color.color = "#29CD24";
+    }
+
+    if (clickerObj.autoMining.label.textContent == "ON" && autoMining == false)
+    {
+        clickerObj.autoMining.label.textContent = "OFF";
+        clickerObj.autoMining.color.color = "red";
+    }
+    if (rapidObj.rapid.label.textContent == "OFF" && rapid == true)
+    {
+        rapidObj.rapid.label.textContent = "ON";
+        rapidObj.rapid.color.color = "#29CD24";
+    }
+    if (rapidObj.rapid.label.textContent == "ON" && rapid == false)
+    {
+        rapidObj.rapid.label.textContent = "OFF";
+        rapidObj.rapid.color.color = "red";
+    }
+
+    if (impactObj.noImpact.label.textContent == "OFF" && noImpact == true)
+    {
+        impactObj.noImpact.label.textContent = "ON";
+        impactObj.noImpact.color.color = "#29CD24";
+    }
+
+    if (impactObj.noImpact.label.textContent == "ON" && noImpact == false)
+    {
+        impactObj.noImpact.label.textContent = "OFF";
+        impactObj.noImpact.color.color = "red";
+    }
+    if (rapidObj.rapidClick.label.textContent == "OFF" && fastClicker == true)
+    {
+        rapidObj.rapidClick.label.textContent = "ON";
+        rapidObj.rapidClick.color.color = "#29CD24";
+    }
+    if (rapidObj.rapidClick.label.textContent == "ON" && fastClicker == false)
+    {
+        rapidObj.rapidClick.label.textContent = "OFF";
+        rapidObj.rapidClick.color.color = "red";
+    }
+
 }
 
 // content.c.js
@@ -1073,11 +1673,7 @@ function mainEvent()
 
             Striker.init(localPlayer);
 
-            localPlayer.at(0).entity.unpossess = function ()
-            {
-                this.isPossessed = !1;
-                reset();
-            }
+
         }
         else if (init && !Utils.isGameReady())
         {
@@ -1090,11 +1686,15 @@ function mainEvent()
 
             // process functions
             AirBreak.process(localPlayer);
+            Clicker.process(localPlayer);
             Striker.process(localPlayer);
             RemoveMines.process(localPlayer);
+            WallHack.process(localPlayer);
+            RapidUpdate.process(localPlayer);
+            NoImpact.process(localPlayer);
             Striker.init(localPlayer);
             Striker.hack(localPlayer);
-            WallHack.process(localPlayer);
+            FastClicker.process(localPlayer);
 
             CheatMenu.setStates();
         }
@@ -1110,4 +1710,5 @@ function mainEvent()
 
 requestAnimationFrame(mainEvent);
 
-console.log('[WAKHack] The Cheat Has Been Loaded');
+console.clear();
+console.log("[RT Hack] has been loaded");
