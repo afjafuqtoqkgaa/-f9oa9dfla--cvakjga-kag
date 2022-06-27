@@ -118,7 +118,7 @@ Utils.isGameReady = function ()
 
 Utils.errorLog = function (text)
 {
-    console.log("[WolfHack] " + text);
+    console.log("[WAKHack] " + text);
 }
 
 // gameObjects.h.js
@@ -819,7 +819,7 @@ let cheatMenuCode = `
         }
 	</style>
 	<div class="shizoval__content">
-		<center>Wolf Hack</center><hr style="height:2px;border-width:0;color:white;background-color:white">
+		<center>WAK Hack</center><hr style="height:2px;border-width:0;color:white;background-color:white">
 		<div id="gameStates" style="display: none;">	
 	    <p>Парение: <font id="airBreakStateColor" color="red"><label id="airBreakState">Выкл</label></font></p>
 	    <p>Скорость: <font color="#purple"><label id="airBreakSpeed">50</label></font></p>
@@ -1110,4 +1110,4 @@ function mainEvent()
 
 requestAnimationFrame(mainEvent);
 
-console.log('[WolfHack] The Cheat Has Been Loaded');
+console.log('[WAKHack] The Cheat Has Been Loaded');
